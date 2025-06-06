@@ -1,35 +1,34 @@
-import { products } from "../page";
-import { Metadata } from "next";
+// app/(pages)/products/[productId]/page.tsx
 
-interface PropsType {
+import { Metadata } from "next";
+import { products } from "../page";
+
+type Props = {
   params: {
     productId: string;
   };
+};
+
+// ✅ Must be synchronous unless you use await/fetch
+export function generateMetadata({ params }: Props): Metadata {
+  const product = products.find((p) => p.id === params.productId);
+  return {
+    title: product ? product.name : "Product Not Found"
+  };
 }
 
-export const generateMetadata = ({ params }: PropsType): Metadata => {
-  const id = params.productId;
-  return {
-    title: `Product ${id}`
-  };
-};
+// ✅ This must also be synchronous unless fetching data
+export default function ProductDetails({ params }: Props) {
+  const product = products.find((p) => p.id === params.productId);
 
-const getRandomNumber = (count: number) => {
-  return Math.floor(Math.random() * count);
-};
-
-export default function ProductDetails({ params }: PropsType) {
-  const product = products.find((product) => product.id === params.productId);
-
-  const random = getRandomNumber(2);
-  if (random === 1) {
-    throw new Error(`Error loading product ${product?.id}`);
+  if (!product) {
+    return <div>Product not found</div>;
   }
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold">{product?.name}</h1>
-      <p className="mt-2">{product?.description}</p>
+      <h1 className="text-2xl font-bold">{product.name}</h1>
+      <p className="mt-2">{product.description}</p>
     </div>
   );
 }

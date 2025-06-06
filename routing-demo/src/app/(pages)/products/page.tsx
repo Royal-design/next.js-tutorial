@@ -1,7 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export const products = [
+// app/products/types.ts
+export interface ProductVariant {
+  id: string;
+  variant: string;
+  price: number;
+  stock: number;
+  image: string;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  image: string;
+  children: ProductVariant[];
+}
+
+export const products: Product[] = [
   {
     id: "p1",
     name: "Smartphone X100",

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import "./globals.css";
+import { ErrorWrapper } from "./error-wrapper";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ErrorWrapper>{children}</ErrorWrapper>
+      </body>
     </html>
   );
 }
