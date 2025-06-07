@@ -1,29 +1,27 @@
 // app/(pages)/products/[productId]/page.tsx
 
 import { Metadata } from "next";
-import { products } from "../page";
+import { products } from "../lib/product";
 
 type Props = {
-  params: {
+  params: Promise<{
     productId: string;
-  };
+  }>;
 };
 
-// ✅ Must be synchronous unless you use await/fetch
-export function generateMetadata({ params }: Props): Metadata {
-  const product = products.find((p) => p.id === params.productId);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const productId = (await params).productId;
+  const product = products.find((p) => p.id === productId);
   return {
     title: product ? product.name : "Product Not Found"
   };
 }
 
-// ✅ This must also be synchronous unless fetching data
-export default function ProductDetails({ params }: Props) {
-  const product = products.find((p) => p.id === params.productId);
+export default async function ProductDetails({ params }: Props) {
+  const productId = (await params).productId;
+  const product = products.find((p) => p.id === productId);
 
-  if (!product) {
-    return <div>Product not found</div>;
-  }
+  if (!product) return <div>Product not found.</div>;
 
   return (
     <div className="p-6">
