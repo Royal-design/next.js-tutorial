@@ -1,6 +1,8 @@
 import { Metadata } from "next";
+
 import "./globals.css";
 import { ErrorWrapper } from "./error-wrapper";
+import { inter, oswald, playfair, titillium } from "./fonts/fonts";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,8 +15,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html
+      lang="en"
+      className={`${inter.variable} ${oswald.variable} ${titillium.variable}  ${playfair.variable} antialiased`}
+    >
+      <body className="font-inter">{children}</body>
     </html>
   );
 }

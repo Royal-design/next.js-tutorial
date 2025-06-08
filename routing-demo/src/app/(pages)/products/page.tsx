@@ -21,6 +21,7 @@ export default async function Products() {
   if (random === 1) {
     throw new Error("Error loading products");
   }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4">
       {products.map((product) => (

@@ -6,7 +6,6 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: green;
 }
 
 .dark {
@@ -15,22 +14,18 @@
 }
 
 @theme inline {
+  --font-poppins: var(--font-poppins);
   --font-inter: var(--font-inter);
-  --font-playfair: var(--font-playfair);
-  --font-titillium: var(--font-titillium);
-  --font-oswald: var(--font-oswald);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@layer base {
+@base {
   * {
-    @apply border-white;
+    @apply 'border-white';
   }
   body {
     @apply bg-gray-200;
