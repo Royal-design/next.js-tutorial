@@ -1,7 +1,8 @@
+import Home from "@/components/home/Home";
 import React from "react";
 
 function page() {
-  return <div className="text-green-500">Welcome to homepage</div>;
+  return <Home />;
 }
 
 export default page;
