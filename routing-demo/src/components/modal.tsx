@@ -18,6 +18,7 @@ export default function Modal({ children }: { children: React.ReactNode }) {
       }
     },
     [onDismiss, overlay, wrapper]
+    
   );
 
   const onKeyDown = useCallback(
