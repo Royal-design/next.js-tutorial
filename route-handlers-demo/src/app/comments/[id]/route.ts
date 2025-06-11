@@ -29,5 +29,9 @@ export async function DELETE(
   const index = comments.findIndex((comment) => comment.id === parseInt(id));
   const deletedComment = comments[index];
   comments.splice(index, 1);
-  return Response.json(deletedComment);
+  return new Response(JSON.stringify(deletedComment), {
+    headers: { "Content-Type": "application/json" },
+    status: 201,
+    statusText: "deleted successfully"
+  });
 }
