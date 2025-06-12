@@ -7,6 +7,7 @@ export default function Home() {
       <Link href="/dashboard" className="bg-gray-400 rounded-md py-2 px-4">
         Dashboard
       </Link>
+
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
