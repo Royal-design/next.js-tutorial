@@ -1,5 +1,5 @@
-import Product from "@/componets/Product";
-import { Review } from "@/componets/Review";
+import Product from "@/components/Product";
+import { Review } from "@/components/Review";
 import React, { Suspense } from "react";
 
 const ProductReview = () => {
