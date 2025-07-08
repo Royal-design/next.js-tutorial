@@ -1,17 +1,10 @@
 "use server";
 
 import { z } from "zod";
-import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
+import { createDbBlog, deleteDbBlog, editDbBlog } from "@/lib/prisma/blog";
 
 const blogSchema = z.object({
-  title: z.string().min(3),
-  description: z.string().min(10),
-  author: z.string().min(2),
-});
-
-const editBlogSchema = z.object({
-  //   id: z.string().min(1).transform(Number),
   title: z.string().min(3),
   description: z.string().min(10),
   author: z.string().min(2),
@@ -42,16 +35,7 @@ export async function createBlog(_: BlogFormState, formData: FormData) {
     };
   }
 
-  const { title, description, author } = result.data;
-
-  await prisma.blog.create({
-    data: {
-      title,
-      description,
-      author,
-      slug: title.toLowerCase().replace(/\s+/g, "-"),
-    },
-  });
+  await createDbBlog(result.data);
 
   redirect("/blog");
 }
@@ -66,7 +50,7 @@ export async function editBlog(
     author: formData.get("author"),
   };
 
-  const result = editBlogSchema.safeParse(raw);
+  const result = blogSchema.safeParse(raw);
   if (!result.success) {
     return {
       success: false,
@@ -74,25 +58,11 @@ export async function editBlog(
     };
   }
 
-  const { title, description, author } = result.data;
-
-  await prisma.blog.update({
-    where: { id },
-    data: {
-      title,
-      description,
-      author,
-      slug: title.toLowerCase().replace(/\s+/g, "-"),
-    },
-  });
-
+  await editDbBlog(id, result.data);
   redirect("/blog");
 }
 
 export async function deleteBlog(id: number) {
-  await prisma.blog.delete({
-    where: { id },
-  });
-
+  await deleteDbBlog(id);
   redirect("/blog");
 }
