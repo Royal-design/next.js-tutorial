@@ -7,7 +7,6 @@ export default async function BlogPage() {
   const blogs: Blog[] = await prisma.blog.findMany({
     orderBy: [{ createdAt: "desc" }, { updatedAt: "desc" }],
   });
-  console.log(blogs);
 
   return (
     <div className="px-8">

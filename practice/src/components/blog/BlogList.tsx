@@ -4,14 +4,20 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Blog } from "@/generated/prisma";
+import { useAppDispatch } from "@/redux/hooks";
+import { setModal } from "@/redux/slice/modalSlice";
 
 export default function BlogList({ blogs }: { blogs: Blog[] }) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   return (
     <>
       <Button
-        onClick={() => router.push("/blog/createblog")}
+        onClick={() => {
+          // router.push("/blog/createblog");
+          dispatch(setModal({ type: "create blog", isOpen: true }));
+        }}
         className="my-4 cursor-pointer"
       >
         Create Blog

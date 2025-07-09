@@ -4,9 +4,12 @@ import React from "react";
 import { Button } from "../ui/button";
 import { Blog } from "@/generated/prisma";
 import { useRouter } from "next/navigation";
-import { deleteBlog } from "@/action/action";
+import { deleteBlog, editBlog } from "@/action/action";
+import { useAppDispatch } from "@/redux/hooks";
+import { setModal } from "@/redux/slice/modalSlice";
 
 export const BlogItem = ({ blog }: { blog: Blog }) => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   return (
     <div>
@@ -14,7 +17,12 @@ export const BlogItem = ({ blog }: { blog: Blog }) => {
         <p>{blog?.title}</p>
         <p>{blog?.description}</p>
         <p>{blog?.author}</p>
-        <Button onClick={() => router.push(`/blog/${blog.slug}/edit`)}>
+        <Button
+          onClick={() => {
+            // router.push(`/blog/${blog.slug}/edit`);
+            dispatch(setModal({ data: blog, isOpen: true, type: "edit blog" }));
+          }}
+        >
           Edit Blog
         </Button>
         <form action={deleteBlog.bind(null, blog.id)}>

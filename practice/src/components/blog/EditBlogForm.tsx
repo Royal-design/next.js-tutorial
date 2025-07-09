@@ -2,18 +2,32 @@
 
 import { BlogFormState, editBlog } from "@/action/action";
 import { Blog } from "@/generated/prisma";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { SubmitButton } from "./SubmitButton";
+import { closeModal } from "@/redux/slice/modalSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { useRouter } from "next/navigation";
 
 const initialState: BlogFormState = {
-  success: true,
+  success: false,
   errors: {},
 };
 
 export function EditBlogForm({ blog }: { blog: Blog }) {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const [state, formAction] = useActionState(
     editBlog.bind(null, blog.id),
     initialState
   );
+
+  useEffect(() => {
+    if (state.success) {
+      dispatch(closeModal());
+      router.push("/blog");
+    }
+  }, [state.success, dispatch]);
+
   return (
     <form action={formAction} className="space-y-4 max-w-md mx-auto mt-8">
       <div>
@@ -52,12 +66,7 @@ export function EditBlogForm({ blog }: { blog: Blog }) {
         )}
       </div>
 
-      <button
-        type="submit"
-        className="bg-green-600 text-white px-4 py-2 rounded"
-      >
-        Update Blog
-      </button>
+      <SubmitButton />
     </form>
   );
 }

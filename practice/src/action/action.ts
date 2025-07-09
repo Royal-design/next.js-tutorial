@@ -3,10 +3,11 @@
 import { z } from "zod";
 import { redirect } from "next/navigation";
 import { createDbBlog, deleteDbBlog, editDbBlog } from "@/lib/prisma/blog";
+import { revalidatePath } from "next/cache";
 
 const blogSchema = z.object({
   title: z.string().min(3),
-  description: z.string().min(10),
+  description: z.string().min(3),
   author: z.string().min(2),
 });
 
@@ -20,46 +21,58 @@ export type BlogFormState = {
 };
 
 export async function createBlog(_: BlogFormState, formData: FormData) {
-  const raw = {
-    title: formData.get("title"),
-    description: formData.get("description"),
-    author: formData.get("author"),
-  };
+  const data = Object.fromEntries(formData);
 
-  const result = blogSchema.safeParse(raw);
+  const validated = blogSchema.safeParse(data);
 
-  if (!result.success) {
+  if (!validated.success) {
     return {
       success: false,
-      errors: result.error.flatten().fieldErrors,
+      errors: validated.error.flatten().fieldErrors,
     };
   }
 
-  await createDbBlog(result.data);
-
-  redirect("/blog");
+  try {
+    await createDbBlog(validated.data);
+    revalidatePath("/blog");
+    return { success: true, errors: {} };
+  } catch (error) {
+    if (error instanceof Error && error.message === "Slug already exists") {
+      return {
+        success: false,
+        errors: { title: ["A blog with this title already exists."] },
+      };
+    }
+    throw error;
+  }
 }
 export async function editBlog(
   id: number,
   _: BlogFormState,
   formData: FormData
 ): Promise<BlogFormState> {
-  const raw = {
-    title: formData.get("title"),
-    description: formData.get("description"),
-    author: formData.get("author"),
-  };
+  const data = Object.fromEntries(formData);
 
-  const result = blogSchema.safeParse(raw);
-  if (!result.success) {
+  const validated = blogSchema.safeParse(data);
+  if (!validated.success) {
     return {
       success: false,
-      errors: result.error.flatten().fieldErrors,
+      errors: validated.error.flatten().fieldErrors,
     };
   }
 
-  await editDbBlog(id, result.data);
-  redirect("/blog");
+  try {
+    await editDbBlog(id, validated.data);
+    return { success: true, errors: {} };
+  } catch (error) {
+    if (error instanceof Error && error.message === "Slug already exists") {
+      return {
+        success: false,
+        errors: { title: ["A blog with this title already exists."] },
+      };
+    }
+    throw error;
+  }
 }
 
 export async function deleteBlog(id: number) {

@@ -1,15 +1,25 @@
 "use client";
 
 import { createBlog, type BlogFormState } from "@/action/action";
-import { useActionState } from "react";
+import { SubmitButton } from "@/components/blog/SubmitButton";
+import { useAppDispatch } from "@/redux/hooks";
+import { closeModal } from "@/redux/slice/modalSlice";
+import { useActionState, useEffect } from "react";
 
 const initialState: BlogFormState = {
-  success: true,
+  success: false,
   errors: {},
 };
 
 export default function CreateBlog() {
+  const dispatch = useAppDispatch();
   const [state, formAction] = useActionState(createBlog, initialState);
+
+  useEffect(() => {
+    if (state.success) {
+      dispatch(closeModal());
+    }
+  }, [state.success, dispatch]);
 
   return (
     <div className="max-w-md mx-auto p-6">
@@ -39,12 +49,7 @@ export default function CreateBlog() {
             <p className="text-red-500 text-sm">{state.errors.author}</p>
           )}
         </div>
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          Submit
-        </button>
+        <SubmitButton />
       </form>
     </div>
   );

@@ -9,6 +9,14 @@ export async function createDbBlog({
   description: string;
   author: string;
 }) {
+  const slug = title.toLowerCase().replace(/\s+/g, "-");
+
+  const existing = await prisma.blog.findUnique({ where: { slug } });
+
+  if (existing) {
+    throw new Error("Slug already exists");
+  }
+
   return await prisma.blog.create({
     data: {
       title,
@@ -31,6 +39,14 @@ export async function editDbBlog(
     author: string;
   }
 ) {
+  const slug = title.toLowerCase().replace(/\s+/g, "-");
+
+  const existing = await prisma.blog.findUnique({ where: { slug } });
+
+  if (existing && existing.id !== id) {
+    throw new Error("Slug already exists");
+  }
+
   return await prisma.blog.update({
     where: { id },
     data: {
