@@ -20,7 +20,17 @@ export const BlogItem = ({ blog }: { blog: Blog }) => {
         <Button
           onClick={() => {
             // router.push(`/blog/${blog.slug}/edit`);
-            dispatch(setModal({ data: blog, isOpen: true, type: "edit blog" }));
+            dispatch(
+              setModal({
+                data: {
+                  ...blog,
+                  createdAt: blog.createdAt.toISOString(),
+                  updatedAt: blog.updatedAt.toISOString(),
+                },
+                isOpen: true,
+                type: "edit blog",
+              })
+            );
           }}
         >
           Edit Blog

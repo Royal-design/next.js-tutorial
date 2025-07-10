@@ -5,12 +5,20 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignOutButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 
 const links = [
   { title: "Home", path: "/" },
   { title: "About", path: "/about" },
   { title: "Contact", path: "/contact" },
-  { title: "Login", path: "/login" }
+  { title: "Login", path: "/login" },
 ];
 
 const Navbar = () => {
@@ -44,18 +52,34 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden items-center space-x-6 md:flex">
-            {links.map((link) => (
-              <Link
-                key={link.path}
-                href={link.path}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
-                  pathname === link.path ? "text-primary" : "text-gray-600"
-                )}
-              >
-                {link.title}
-              </Link>
-            ))}
+            {/* <div className="">
+              {links.map((link) => (
+                <Link
+                  key={link.path}
+                  href={link.path}
+                  className={cn(
+                    "text-sm font-medium transition-colors hover:text-primary",
+                    pathname === link.path ? "text-primary" : "text-gray-600"
+                  )}
+                >
+                  {link.title}
+                </Link>
+              ))}
+            </div> */}
+            <SignedOut>
+              <SignInButton mode="modal" />
+            </SignedOut>
+            <SignedIn>
+              <Link href="/user-profile">Profile</Link>
+              <SignOutButton />
+            </SignedIn>
+
+            {/* <UserButton /> */}
+            {/* <SignUpButton>
+              <button className="bg-[#6c47ff] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
+                Sign Up
+              </button>
+            </SignUpButton> */}
           </nav>
 
           {/* Mobile Hamburger Button */}

@@ -1,3 +1,12 @@
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
+
 import type { Metadata } from "next";
 import { inter, poppins } from "./fonts/fonts";
 import "./globals.css";
@@ -18,15 +27,17 @@ export default function RootLayout({
   modal: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${poppins.variable} antialiased`}>
-        <ReduxProvider>
-          <DisplayModal />
-          <Navbar />
-          {children}
-          {modal}
-        </ReduxProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${inter.variable} ${poppins.variable} antialiased`}>
+          <ReduxProvider>
+            <DisplayModal />
+            <Navbar />
+            {children}
+            {modal}
+          </ReduxProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

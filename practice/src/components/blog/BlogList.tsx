@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Blog } from "@/generated/prisma";
 import { useAppDispatch } from "@/redux/hooks";
 import { setModal } from "@/redux/slice/modalSlice";
+import { Search } from "../Search";
 
 export default function BlogList({ blogs }: { blogs: Blog[] }) {
   const router = useRouter();
@@ -13,15 +14,18 @@ export default function BlogList({ blogs }: { blogs: Blog[] }) {
 
   return (
     <>
-      <Button
-        onClick={() => {
-          // router.push("/blog/createblog");
-          dispatch(setModal({ type: "create blog", isOpen: true }));
-        }}
-        className="my-4 cursor-pointer"
-      >
-        Create Blog
-      </Button>
+      <div className="flex justify-between flex-wrap">
+        <Button
+          onClick={() => {
+            // router.push("/blog/createblog");
+            dispatch(setModal({ type: "create blog", isOpen: true }));
+          }}
+          className="my-4 cursor-pointer"
+        >
+          Create Blog
+        </Button>
+        <Search />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
         {blogs.map((blog) => (
