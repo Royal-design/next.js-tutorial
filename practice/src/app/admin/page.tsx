@@ -1,6 +1,7 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import { removeRole, setRole } from "./action";
 import { Button } from "@/components/ui/button";
+import { CustomPublicMetadata } from "@/types/type";
 
 export default async function AdminPage() {
   const client = await clerkClient();
@@ -23,7 +24,10 @@ export default async function AdminPage() {
                   )?.emailAddress
                 }
               </p>
-              <p>{user?.publicMetadata?.role}</p>
+              <p>
+                {(user.publicMetadata as CustomPublicMetadata)?.role ??
+                  "No role"}
+              </p>
             </div>
 
             <div className="flex items-center gap-2">
